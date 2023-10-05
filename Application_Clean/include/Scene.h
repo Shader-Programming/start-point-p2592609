@@ -11,7 +11,7 @@ public:
 	Scene(GLFWwindow* window, std::shared_ptr<InputHandler> H) {};
 	~Scene() {};
 	void update(float dt) {};
-private:
+protected:
 	GLFWwindow* m_window;
 	std::shared_ptr<InputHandler> m_handler;
 	std::shared_ptr<FirstPersonCamera> m_camera;
