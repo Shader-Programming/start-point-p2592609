@@ -26,14 +26,27 @@ void MyScene::makeVAO()
 	//transfer data to GPU
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexData.size(), vertexData.data(), GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+
 
 }
 
 void MyScene::render()
 {
+	m_model = glm::mat4(1.0f);
+
+	m_projection = m_camera->getProjectionMatrix();
+	m_view = m_camera->getViewMatrix();
 	m_myShader->use();
+	//set uniforms
+	m_myShader->setMat4("View", m_view);
+	m_myShader->setMat4("Projection", m_projection);
+	m_myShader->setMat4("Model", m_model);
+
+
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, cubeIndices.size(), GL_UNSIGNED_INT, 0);
 }
