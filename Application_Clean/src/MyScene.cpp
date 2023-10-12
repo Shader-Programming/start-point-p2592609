@@ -4,65 +4,44 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 {
 	m_handler = H;
 	m_camera = std::make_shared<FirstPersonCamera>();
-	m_camera->attachHandler(m_window, m_handler);
-
-	makeVAO();
+	//m_camera->attachHandler(m_window, m_handler);
+	
 
 	m_myShader = std::make_shared<Shader>("..\\Shaders\\VertexShader.glsl", "..\\Shaders\\FragmentShader.glsl");
-}
-
-void MyScene::makeVAO()
-{
-	//create buffers
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-	//bind buffers
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * cubeIndices.size(), cubeIndices.data(), GL_STATIC_DRAW);
-	//transfer data to GPU
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexData.size(), vertexData.data(), GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-
-
+	m_cube = std::make_shared<Cube>();
+	m_cube->attachHandler(m_handler);
 }
 
 void MyScene::render()
 {
-	m_model = glm::mat4(1.0f);
-
+	//m_cube->getModelMatrix() = glm::mat4(1.0f);
 	m_projection = m_camera->getProjectionMatrix();
 	m_view = m_camera->getViewMatrix();
 	m_myShader->use();
 	//set uniforms
 	m_myShader->setMat4("View", m_view);
 	m_myShader->setMat4("Projection", m_projection);
-	m_myShader->setMat4("Model", m_model);
+	m_myShader->setMat4("Model", m_cube->getModelMatrix());
 
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, cubeIndices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(m_cube->getVAO());
+	glDrawElements(GL_TRIANGLES, m_cube->getIndicesCount(), GL_UNSIGNED_INT, 0);
 
 	//New Cube
-	m_model = glm::rotate(m_model, (float)(glfwGetTime() * 0.5), glm::vec3(0.0, 1.0, 0.0));
-	m_model = glm::translate(m_model, glm::vec3(5.0, 0.0, 0.0));
+	/*m_cube->rotate((float)(glfwGetTime() * 0.5), glm::vec3(0.0, 1.0, 0.0));
+	m_cube->translate(glm::vec3(5.0, 0.0, 0.0));
 	
-	m_model = glm::scale(m_model, glm::vec3(0.5, 0.5, 0.5));
+	m_cube->scale(glm::vec3(0.5, 0.5, 0.5));
 
-	m_myShader->setMat4("Model", m_model);
+	m_myShader->setMat4("Model", m_cube->getModelMatrix());
 
-	glDrawElements(GL_TRIANGLES, vertexData.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, m_cube->getIndicesCount(), GL_UNSIGNED_INT, 0);*/
 }
 
 void MyScene::update(float dt)
 {
-	m_camera->update(dt);
+	m_cube->update(dt);
+	//m_camera->update(dt);
 	render();
+	
 }
 
