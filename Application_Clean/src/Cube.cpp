@@ -1,6 +1,9 @@
 #include "Cube.h"
 
-Cube::Cube()
+Cube::Cube(glm::vec3 col, float shine, float specStrength) :
+	m_colour(col),
+	m_shine(shine),
+	m_specularStrength(specStrength)
 {
 	makeVAO();
 	resetTransform();
@@ -8,6 +11,14 @@ Cube::Cube()
 
 Cube::~Cube()
 {
+}
+
+void Cube::setCubeMaterialValues(std::shared_ptr<Shader> shader)
+{
+	shader->setVec3("cubeColour", m_colour);
+	shader->setFloat("shine", m_shine);
+	shader->setFloat("specStrength", m_specularStrength);
+	
 }
 
 void Cube::update(float dt)
@@ -38,12 +49,17 @@ void Cube::attachHandler(std::shared_ptr<InputHandler> H)
 	m_handler = H;
 }
 
+void Cube::setTransform(std::shared_ptr<Shader> shader)
+{
+	shader->setMat4("Model", m_transform);
+}
+
 void Cube::rotate(float angle, glm::vec3 axis)
 {
 	m_transform = glm::rotate(m_transform, angle, axis);
 }
 
-void Cube::scale(glm::vec3 axis)
+void Cube::scale(float scaleFactor, glm::vec3 axis)
 {
 	m_transform = glm::scale(m_transform, axis);
 }

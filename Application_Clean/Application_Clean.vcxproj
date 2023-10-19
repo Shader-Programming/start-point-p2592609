@@ -150,6 +150,7 @@
     <ClCompile Include="src\FPSCamera.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\InputHandler.cpp" />
+    <ClCompile Include="src\Lights\DirectionalLight.cpp" />
     <ClCompile Include="src\MyScene.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\WindowManager.cpp" />
@@ -160,6 +161,8 @@
     <ClInclude Include="include\FPSCamera.h" />
     <ClInclude Include="include\GLFWinputCodes.h" />
     <ClInclude Include="include\InputHandler.h" />
+    <ClInclude Include="include\Lights\DirectionalLight.h" />
+    <ClInclude Include="include\Lights\Light.h" />
     <ClInclude Include="include\MyScene.h" />
     <ClInclude Include="include\Properties.h" />
     <ClInclude Include="include\Scene.h" />

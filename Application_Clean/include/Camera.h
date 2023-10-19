@@ -6,6 +6,7 @@
 
 #include "InputHandler.h"
 #include "Properties.h"
+#include "Cube.h"
 
 class GameObject;
 
@@ -53,6 +54,7 @@ public:
 	// Control
 	virtual void update(float dt) {};
 	virtual void attachHandler(GLFWwindow* W, std::shared_ptr<InputHandler> H) {}; // keyboard
+	virtual void swapHandler(std::shared_ptr<Cube> m_cube) {};
 
 
 protected:
