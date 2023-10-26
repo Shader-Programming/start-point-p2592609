@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "Cube.h"
 #include "Lights/DirectionalLight.h"
+#include "Lights/PointLight.h"
 
 class MyScene : public Scene
 {
@@ -20,7 +21,8 @@ private:
 
 	std::shared_ptr<Cube> m_cube;
 	std::shared_ptr<Shader> m_myShader;
-	std::shared_ptr<DirectionalLight> m_dierectionalLight;
+	std::shared_ptr<DirectionalLight> m_directionalLight;
+	std::shared_ptr<PointLight> m_pointLight;
 	glm::mat4 m_view, m_projection;
 
 	bool ab;

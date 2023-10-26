@@ -6,11 +6,13 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 	m_camera = std::make_shared<FirstPersonCamera>();
 	
 	m_myShader = std::make_shared<Shader>("..\\Shaders\\VertexShader.glsl", "..\\Shaders\\FragmentShader.glsl");
-	m_dierectionalLight = std::make_shared<DirectionalLight>(glm::vec3(1.0), glm::vec3(0.0f, -1.0f, 0.0f));
+	m_directionalLight = std::make_shared<DirectionalLight>(glm::vec3(1.0), glm::vec3(0.0f, -1.0f, 0.0f));
 	m_cube = std::make_shared<Cube>(glm::vec3(0.1, 0.2, 0.3), 16, 2);
+	m_pointLight = std::make_shared<PointLight>(glm::vec3(1.0, 0.0, 0.0), glm::vec3(-2.0, 0.0, 0.0), glm::vec3(1.0, 0.22, 0.02));
 
-	m_dierectionalLight->setLightUniforms(m_myShader);
+	m_directionalLight->setLightUniforms(m_myShader);
 	m_cube->setCubeMaterialValues(m_myShader);
+	m_pointLight->setLightUniforms(m_myShader);
 
 	setHandler(true);
 }
@@ -30,15 +32,21 @@ void MyScene::render()
 	m_cube->setTransform(m_myShader);
 	glDrawElements(GL_TRIANGLES, m_cube->getIndicesCount(), GL_UNSIGNED_INT, 0);
 
-	//New Cube
-	/*m_cube->rotate((float)(glfwGetTime() * 0.5), glm::vec3(0.0, 1.0, 0.0));
-	//m_cube->translate(glm::vec3(5.0, 0.0, 0.0));
-	
-	m_cube->scale(glm::vec3(0.5, 0.5, 0.5));
+	const float floorLevel = -2.0f;  // change these to whatever you like
+	const float floorSize = 7.0f;
 
-	m_myShader->setMat4("Model", m_cube->getModelMatrix());
+	std::vector<float> vertexData = {
+		-floorSize, floorLevel,  -floorSize,     0.0, 1.0, 0.0,
+		floorSize, floorLevel,  -floorSize,     0.0, 1.0, 0.0,
+		floorSize, floorLevel,   floorSize,     0.0, 1.0, 0.0,
+		-floorSize, floorLevel,   floorSize,     0.0, 1.0, 0.0,
+	};
+	std::vector<unsigned int> floorIndices = {
+		3,2,1,
+		3,1,0
+	};
 
-	glDrawElements(GL_TRIANGLES, m_cube->getIndicesCount(), GL_UNSIGNED_INT, 0);*/
+	S
 }
 
 void MyScene::update(float dt)

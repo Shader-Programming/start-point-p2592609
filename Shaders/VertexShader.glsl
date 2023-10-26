@@ -13,7 +13,7 @@ out vec3 posInWS;
 void main()
 {
 
-	normal = aNorm;
+	normal = (Model*vec4(aNorm,0.0)).xyz;
 
 	vec4 worldSpace = Model * vec4(aPos, 1.0);
 	posInWS = worldSpace.xyz;
