@@ -1,9 +1,6 @@
 #include "Cube.h"
 
-Cube::Cube(glm::vec3 col, float shine, float specStrength) :
-	m_colour(col),
-	m_shine(shine),
-	m_specularStrength(specStrength)
+Cube::Cube(glm::vec3 col, float shine, float specStrength) : Shape(col, shine, specStrength)
 {
 	makeVAO();
 	resetTransform();
@@ -11,14 +8,6 @@ Cube::Cube(glm::vec3 col, float shine, float specStrength) :
 
 Cube::~Cube()
 {
-}
-
-void Cube::setCubeMaterialValues(std::shared_ptr<Shader> shader)
-{
-	shader->setVec3("cubeColour", m_colour);
-	shader->setFloat("shine", m_shine);
-	shader->setFloat("specStrength", m_specularStrength);
-	
 }
 
 void Cube::update(float dt)
@@ -49,11 +38,6 @@ void Cube::attachHandler(std::shared_ptr<InputHandler> H)
 	m_handler = H;
 }
 
-void Cube::setTransform(std::shared_ptr<Shader> shader)
-{
-	shader->setMat4("Model", m_transform);
-}
-
 void Cube::rotate(float angle, glm::vec3 axis)
 {
 	m_transform = glm::rotate(m_transform, angle, axis);
@@ -80,7 +64,7 @@ void Cube::makeVAO()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * cubeIndices.size(), cubeIndices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), indices.data(), GL_STATIC_DRAW);
 	//transfer data to GPU
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexData.size(), vertexData.data(), GL_STATIC_DRAW);
 

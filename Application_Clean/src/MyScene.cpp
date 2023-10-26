@@ -8,10 +8,12 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 	m_myShader = std::make_shared<Shader>("..\\Shaders\\VertexShader.glsl", "..\\Shaders\\FragmentShader.glsl");
 	m_directionalLight = std::make_shared<DirectionalLight>(glm::vec3(1.0), glm::vec3(0.0f, -1.0f, 0.0f));
 	m_cube = std::make_shared<Cube>(glm::vec3(0.1, 0.2, 0.3), 16, 2);
+	m_plane = std::make_shared<Plane>(glm::vec3(0.1, 0.2, 0.3), 16, 2);
 	m_pointLight = std::make_shared<PointLight>(glm::vec3(1.0, 0.0, 0.0), glm::vec3(-2.0, 0.0, 0.0), glm::vec3(1.0, 0.22, 0.02));
 
 	m_directionalLight->setLightUniforms(m_myShader);
-	m_cube->setCubeMaterialValues(m_myShader);
+	m_cube->setMaterialValues(m_myShader);
+	m_plane->setMaterialValues(m_myShader);
 	m_pointLight->setLightUniforms(m_myShader);
 
 	setHandler(true);
@@ -19,7 +21,6 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 
 void MyScene::render()
 {
-	//m_cube->getModelMatrix() = glm::mat4(1.0f);
 	
 	m_myShader->use();
 
@@ -32,21 +33,10 @@ void MyScene::render()
 	m_cube->setTransform(m_myShader);
 	glDrawElements(GL_TRIANGLES, m_cube->getIndicesCount(), GL_UNSIGNED_INT, 0);
 
-	const float floorLevel = -2.0f;  // change these to whatever you like
-	const float floorSize = 7.0f;
-
-	std::vector<float> vertexData = {
-		-floorSize, floorLevel,  -floorSize,     0.0, 1.0, 0.0,
-		floorSize, floorLevel,  -floorSize,     0.0, 1.0, 0.0,
-		floorSize, floorLevel,   floorSize,     0.0, 1.0, 0.0,
-		-floorSize, floorLevel,   floorSize,     0.0, 1.0, 0.0,
-	};
-	std::vector<unsigned int> floorIndices = {
-		3,2,1,
-		3,1,0
-	};
-
-	S
+	glBindVertexArray(m_plane->getVAO());
+	m_plane->setTransform(m_myShader);
+	glDrawElements(GL_TRIANGLES, m_plane->getIndicesCount(), GL_UNSIGNED_INT, 0);
+	
 }
 
 void MyScene::update(float dt)

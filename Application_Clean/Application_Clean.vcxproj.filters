@@ -45,6 +45,9 @@
     <ClCompile Include="src\Lights\PointLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\Plane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\WindowManager.h">
@@ -86,7 +89,10 @@
     <ClInclude Include="include\Lights\PointLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Floor.h">
+    <ClInclude Include="include\Plane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Shape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

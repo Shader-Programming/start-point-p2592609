@@ -7,24 +7,20 @@
 #include <vector>
 #include <memory>
 #include "Shader.h"
+#include "Shape.h"
 #include "InputHandler.h"
 
-class Cube
+class Cube : public Shape
 {
 public:
 	Cube(glm::vec3 col, float shine, float specStrength);
 	~Cube();
-	void setCubeMaterialValues(std::shared_ptr<Shader> shader);
 
 	void update(float dt);
 	void attachHandler(std::shared_ptr<InputHandler> H);
 
-	void resetTransform() { m_transform = glm::mat4(1.0); }
-	void setTransform(std::shared_ptr<Shader> shader);
-
 	unsigned int getVAO() { return VAO; }
-	glm::mat4& getModelMatrix() { return m_transform;  }
-	unsigned int getIndicesCount() { return cubeIndices.size(); }
+	unsigned int getIndicesCount() { return indices.size(); }
 
 	void rotate(float angle, glm::vec3 axis);
 	void scale(float scaleFactor, glm::vec3 axis);
@@ -34,10 +30,6 @@ private:
 	void makeVAO();
 
 	unsigned int VAO, EBO, VBO;
-	glm::mat4 m_transform;
-	float m_shine;
-	float m_specularStrength;
-	glm::vec3 m_colour;
 
 	std::vector<float> vertexData = {
 		//  xyz, normal
@@ -72,7 +64,7 @@ private:
 		  0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
 		 -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f
 	};
-	std::vector<unsigned int> cubeIndices = {
+	std::vector<unsigned int> indices = {
 		0, 1, 2, 2, 3, 0,
 		4, 5, 6, 6, 7, 4,
 		8, 9, 10, 10, 11, 8,

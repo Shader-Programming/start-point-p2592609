@@ -7,13 +7,17 @@
 #include <vector>
 #include <memory>
 #include "Shader.h"
+#include "Shape.h"
 
-class Floor
+class Plane : public Shape
 {
 public:
+	Plane(glm::vec3 col, float shine, float specStrength);
+	~Plane() {};
 
 	unsigned int getVAO() { return VAO; }
-	unsigned int getIndicesCount() { return floorIndices.size(); }
+	unsigned int getIndicesCount() { return indices.size(); }
+
 private:
 
 	void makeVAO();
@@ -29,7 +33,7 @@ private:
 		floorSize, floorLevel,   floorSize,     0.0, 1.0, 0.0,
 		-floorSize, floorLevel,   floorSize,     0.0, 1.0, 0.0,
 	};
-	std::vector<unsigned int> floorIndices = {
+	std::vector<unsigned int> indices = {
 		3,2,1,
 		3,1,0
 	};

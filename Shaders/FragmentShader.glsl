@@ -6,7 +6,7 @@ in vec3 normal;
 in vec3 posInWS;
 
 uniform vec3 viewPos;
-uniform vec3 cubeColour;
+uniform vec3 objectColour;
 uniform vec3 lightColour;
 uniform vec3 lightDirection;
 uniform float ambientFactor;
@@ -43,11 +43,11 @@ void main()
 
 vec3 getDirectionalLight()
 {
-	vec3 ambient = cubeColour * lightColour * ambientFactor;
+	vec3 ambient = objectColour * lightColour * ambientFactor;
 
 	float diffuseFactor = dot(n, -lightDirection);
 	diffuseFactor = max(diffuseFactor, 0.0f);
-	vec3 diffuse = cubeColour * lightColour * diffuseFactor;
+	vec3 diffuse = objectColour * lightColour * diffuseFactor;
 
 	vec3 H = normalize(-lightDirection + viewDir);
 	float specLevel = dot(n, H);
@@ -67,7 +67,7 @@ vec3 getPointLight()
 
 	float diffuseFactor = dot(n, lightDir);
 	diffuseFactor = max(diffuseFactor, 0.0f);
-	vec3 diffuse = cubeColour * plightColour * diffuseFactor;
+	vec3 diffuse = objectColour * plightColour * diffuseFactor;
 
 	vec3 H = normalize(lightDir + viewDir);
 	float specLevel = dot(n, H);
