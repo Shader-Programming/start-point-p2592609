@@ -4,18 +4,15 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 {
 	m_handler = H;
 	m_camera = std::make_shared<FirstPersonCamera>();
-	//m_camera->attachHandler(m_window, m_handler);
 	
-
 	m_myShader = std::make_shared<Shader>("..\\Shaders\\VertexShader.glsl", "..\\Shaders\\FragmentShader.glsl");
 	m_dierectionalLight = std::make_shared<DirectionalLight>(glm::vec3(1.0), glm::vec3(0.0f, -1.0f, 0.0f));
 	m_cube = std::make_shared<Cube>(glm::vec3(0.1, 0.2, 0.3), 16, 2);
 
 	m_dierectionalLight->setLightUniforms(m_myShader);
 	m_cube->setCubeMaterialValues(m_myShader);
-	//m_cube->attachHandler(m_handler);
 
-	ab = setHandler(true);
+	setHandler(true);
 }
 
 void MyScene::render()
@@ -48,13 +45,13 @@ void MyScene::update(float dt)
 {
 	if (m_handler->keyHasBeenPressed()) {
 		if (m_handler->isKeyPressed(GLFW_KEY_T)) {
-			if (ab = true)
+			if (ab)
 			{
-				ab = setHandler(false);
+				setHandler(false);
 			}
 			else
 			{
-				ab = setHandler(true);
+				setHandler(true);
 			}
 			
 		}
@@ -73,19 +70,19 @@ void MyScene::update(float dt)
 	
 }
 
-bool MyScene::setHandler(bool handler)
+void MyScene::setHandler(bool handler)
 {
-	if (true)
+	if (handler)
 	{
 		m_cube->attachHandler(nullptr);
 		m_camera->attachHandler(m_window, m_handler);
-		return true;
+		ab = true;
 	}
 	else
 	{
-		//m_camera->attachHandler(m_window, nullptr);
+		m_camera->attachHandler(m_window, nullptr);
 		m_cube->attachHandler(m_handler);
-		return false;
+		ab = false;
 	}
 }
 

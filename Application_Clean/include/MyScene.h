@@ -11,7 +11,7 @@ public:
 	MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H);
 	~MyScene() {};
 	void update(float dt);
-	bool setHandler(bool handler);
+	void setHandler(bool handler);
 
 
 private:
