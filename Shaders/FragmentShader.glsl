@@ -7,20 +7,31 @@ in vec3 posInWS;
 
 uniform vec3 viewPos;
 uniform vec3 objectColour;
+uniform float shine;
+uniform float specStrength;
+
+//Directional Light
 uniform vec3 lightColour;
 uniform vec3 lightDirection;
 uniform float ambientFactor;
-uniform float shine;
-uniform float specStrength;
+
+//Point Light
 uniform vec3 plightPosition;
 uniform vec3 plightColour;
 uniform vec3 pAttentuation;
 
-struct pointLight {
-	vec3 colour;
-	vec3 position;
-	vec3 constants;
-};
+//Spot Light
+uniform vec3 slightPosition;
+uniform vec3 slightColour;
+uniform vec3 sAttentuation;
+uniform vec3 sDirection;
+uniform vec2 sRadii;
+
+//struct pointLight {
+	//vec3 colour;
+	//vec3 position;
+	//vec3 constants;
+//};
 
 //#define numPL 2
 //uniform pointLight[numPL];
@@ -30,6 +41,7 @@ vec3 viewDir = normalize(viewPos - posInWS);
 
 vec3 getDirectionalLight();
 vec3 getPointLight();
+vec3 getSpotLight();
 
 
 void main()
@@ -77,5 +89,35 @@ vec3 getPointLight()
 
 	diffuse = diffuse * attn;
 	specular = specular * attn;
+	return diffuse + specular;
+}
+
+vec3 getSpotLight()
+{
+	float distance = length(slightPosition - posInWS);
+	float attn = 1.0 / (sAttentuation.x + (sAttentuation.y * distance) + (sAttentuation.z * (distance * distance)));
+
+	vec3 slightDir = normalize((slightPosition - posInWS));
+
+	float diffuseFactor = dot(n, slightDir);
+	diffuseFactor = max(diffuseFactor, 0.0f);
+	vec3 diffuse = objectColour * slightColour * diffuseFactor;
+
+	vec3 H = normalize(slightDir + viewDir);
+	float specLevel = dot(n, H);
+	specLevel = max(specLevel, 0.0);
+	specLevel = pow(specLevel, shine);
+	vec3 specular = slightColour * specLevel * specStrength;
+
+	diffuse = diffuse * attn;
+	specular = specular * attn;
+
+	float theta = dot(-slightDir, normalize(slightDir));
+	float denom = (sRadii.x - sRadii.y);
+	float intensity = (theta - sRadii.y) / denom;
+	intensity = clamp(intensity, 0.0, 1.0);
+	diffuse = diffuse * intensity;
+	specular = specular * intensity;
+
 	return diffuse + specular;
 }

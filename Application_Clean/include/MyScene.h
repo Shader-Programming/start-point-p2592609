@@ -6,6 +6,7 @@
 #include "Plane.h"
 #include "Lights/DirectionalLight.h"
 #include "Lights/PointLight.h"
+#include "Lights/SpotLight.h"
 
 class MyScene : public Scene
 {
@@ -25,6 +26,7 @@ private:
 	std::shared_ptr<Shader> m_myShader;
 	std::shared_ptr<DirectionalLight> m_directionalLight;
 	std::shared_ptr<PointLight> m_pointLight;
+	std::shared_ptr<SpotLight> m_spotLight;
 	glm::mat4 m_view, m_projection;
 
 	bool ab;

@@ -9,7 +9,7 @@ m_constants(constants)
 void PointLight::setLightUniforms(std::shared_ptr<Shader> shader)
 {
 	shader->use();
-	shader->setVec3("pointLight[0].plightPosition", m_position);
-	shader->setVec3("pointLight[0].plightColour", m_colour);
-	shader->setVec3("pointLight[0].pAttentuation", m_constants);
+	shader->setVec3("plightPosition", m_position);
+	shader->setVec3("plightColour", m_colour);
+	shader->setVec3("pAttentuation", m_constants);
 }

@@ -12,15 +12,16 @@ class Shape
 public:
 	Shape(glm::vec3 col, float shine, float specStrength) : m_colour(col), m_shine(shine), m_specularStrength(specStrength) {}
 	~Shape() {};
-	virtual void setMaterialValues(std::shared_ptr<Shader> shader) {
+	void setMaterialValues(std::shared_ptr<Shader> shader) {
 		shader->setVec3("objectColour", m_colour);
 		shader->setFloat("shine", m_shine);
 		shader->setFloat("specStrength", m_specularStrength);
 	};
 
-	virtual void resetTransform() { m_transform = glm::mat4(1.0); }
+	void resetTransform() { m_transform = glm::mat4(1.0); }
 	glm::mat4& getModelMatrix() { return m_transform; }
 	void setTransform(std::shared_ptr<Shader> shader) { shader->setMat4("Model", m_transform); }
+
 
 protected:
 	float m_shine;

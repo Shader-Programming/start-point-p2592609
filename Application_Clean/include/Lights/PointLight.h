@@ -18,7 +18,7 @@ public:
 	glm::vec3& getPosition() { return m_position; }
 	glm::vec3& getConstants() { return m_constants; }
 
-private:
+protected:
 	glm::vec3 m_constants;
 	glm::vec3 m_position;
 };
