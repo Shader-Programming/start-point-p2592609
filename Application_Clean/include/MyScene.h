@@ -7,6 +7,7 @@
 #include "Lights/DirectionalLight.h"
 #include "Lights/PointLight.h"
 #include "Lights/SpotLight.h"
+#include "Textures/TextureManager.h"
 
 class MyScene : public Scene
 {

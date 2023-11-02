@@ -18,6 +18,9 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 	m_pointLight->setLightUniforms(m_myShader);
 	m_spotLight->setLightUniforms(m_myShader);
 
+	unsigned int cubeDiff = TextureManager::loadTexture("..\\Resources\\diffuseCube.jpg");
+	unsigned int cubeSpec = TextureManager::loadTexture("..\\Resources\\specularCube.jpg");
+
 	setHandler(true);
 }
 

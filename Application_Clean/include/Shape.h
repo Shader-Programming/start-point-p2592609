@@ -12,10 +12,17 @@ class Shape
 public:
 	Shape(glm::vec3 col, float shine, float specStrength) : m_colour(col), m_shine(shine), m_specularStrength(specStrength) {}
 	~Shape() {};
-	void setMaterialValues(std::shared_ptr<Shader> shader) {
-		shader->setVec3("objectColour", m_colour);
+	virtual void setMaterialValues(std::shared_ptr<Shader> shader) {
+		//shader->setVec3("objectColour", m_colour);
 		shader->setFloat("shine", m_shine);
-		shader->setFloat("specStrength", m_specularStrength);
+		//shader->setFloat("specStrength", m_specularStrength);
+		shader->setInt("diffuseMap", 0);
+		shader->setInt("specularMap", 1);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, diffuseMap);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specularMap);
 	};
 
 	void resetTransform() { m_transform = glm::mat4(1.0); }
@@ -28,5 +35,8 @@ protected:
 	float m_specularStrength;
 	glm::vec3 m_colour;
 	glm::mat4 m_transform;
+
+	unsigned int diffuseMap;
+	unsigned int specularMap;
 
 };

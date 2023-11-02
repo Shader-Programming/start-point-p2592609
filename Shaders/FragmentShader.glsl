@@ -4,11 +4,16 @@ out vec4 FragColor;
 
 in vec3 normal;
 in vec3 posInWS;
+in vec2 uv;
 
 uniform vec3 viewPos;
-uniform vec3 objectColour;
+//Material Props
+//uniform vec3 objectColour;
 uniform float shine;
-uniform float specStrength;
+//uniform float specStrength;
+uniform sampler2D diffuseMap;
+uniform sampler2D specularMap;
+
 
 //Directional Light
 uniform vec3 lightColour;
@@ -55,11 +60,15 @@ void main()
 
 vec3 getDirectionalLight()
 {
-	vec3 ambient = objectColour * lightColour * ambientFactor;
+
+	vec3 objCol = texture(diffuseMap, uv).rgb;
+	float specStrength = texture(specularMap, uv).r;
+
+	vec3 ambient = objCol * lightColour * ambientFactor;
 
 	float diffuseFactor = dot(n, -lightDirection);
 	diffuseFactor = max(diffuseFactor, 0.0f);
-	vec3 diffuse = objectColour * lightColour * diffuseFactor;
+	vec3 diffuse = objCol * lightColour * diffuseFactor;
 
 	vec3 H = normalize(-lightDirection + viewDir);
 	float specLevel = dot(n, H);
@@ -72,6 +81,9 @@ vec3 getDirectionalLight()
 
 vec3 getPointLight()
 {
+	vec3 objCol = texture(diffuseMap, uv).rgb;
+	float specStrength = texture(specularMap, uv).r;
+
 	float distance = length(plightPosition - posInWS);
 	float attn = 1.0/(pAttentuation.x + (pAttentuation.y*distance) + (pAttentuation.z*(distance*distance)));
 
@@ -79,7 +91,7 @@ vec3 getPointLight()
 
 	float diffuseFactor = dot(n, lightDir);
 	diffuseFactor = max(diffuseFactor, 0.0f);
-	vec3 diffuse = objectColour * plightColour * diffuseFactor;
+	vec3 diffuse = objCol * plightColour * diffuseFactor;
 
 	vec3 H = normalize(lightDir + viewDir);
 	float specLevel = dot(n, H);
@@ -94,6 +106,9 @@ vec3 getPointLight()
 
 vec3 getSpotLight()
 {
+	vec3 objCol = texture(diffuseMap, uv).rgb;
+	float specStrength = texture(specularMap, uv).r;
+
 	float distance = length(slightPosition - posInWS);
 	float attn = 1.0 / (sAttentuation.x + (sAttentuation.y * distance) + (sAttentuation.z * (distance * distance)));
 
@@ -101,7 +116,7 @@ vec3 getSpotLight()
 
 	float diffuseFactor = dot(n, slightDir);
 	diffuseFactor = max(diffuseFactor, 0.0f);
-	vec3 diffuse = objectColour * slightColour * diffuseFactor;
+	vec3 diffuse = objCol * slightColour * diffuseFactor;
 
 	vec3 H = normalize(slightDir + viewDir);
 	float specLevel = dot(n, H);
