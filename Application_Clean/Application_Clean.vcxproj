@@ -156,6 +156,7 @@
     <ClCompile Include="src\Lights\SpotLight.cpp" />
     <ClCompile Include="src\MyScene.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Shape.cpp" />
     <ClCompile Include="src\Textures\stb_image.cpp" />
     <ClCompile Include="src\Textures\TextureManager.cpp" />
     <ClCompile Include="src\WindowManager.cpp" />

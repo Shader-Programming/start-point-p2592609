@@ -12,17 +12,12 @@
 class Plane : public Shape
 {
 public:
-	Plane(glm::vec3 col, float shine, float specStrength);
+	Plane(unsigned int diffTexture, unsigned int specTexture,  unsigned int normalTexture, float shine);
 	~Plane() {};
 
-	unsigned int getVAO() { return VAO; }
 	unsigned int getIndicesCount() { return indices.size(); }
 
 private:
-
-	void makeVAO();
-
-	unsigned int VAO, EBO, VBO;
 
 	const float floorLevel = -2.0f; 
 	const float floorSize = 7.0f;

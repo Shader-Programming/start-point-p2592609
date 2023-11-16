@@ -31,5 +31,6 @@ private:
 	glm::mat4 m_view, m_projection;
 
 	bool ab;
+	bool useNM = false;
 
 };

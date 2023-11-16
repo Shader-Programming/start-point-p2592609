@@ -14,7 +14,7 @@
 class Cube : public Shape
 {
 public:
-	Cube(glm::vec3 col, float shine, float specStrength);
+	Cube(unsigned int diffTexture, unsigned int specTexture, unsigned int normalTexture, float shine);
 	~Cube();
 
 	//void setMaterialValues(std::shared_ptr<Shader> shader) override;
@@ -22,7 +22,6 @@ public:
 	void update(float dt);
 	void attachHandler(std::shared_ptr<InputHandler> H);
 
-	unsigned int getVAO() { return VAO; }
 	unsigned int getIndicesCount() { return indices.size(); }
 
 	void rotate(float angle, glm::vec3 axis);
@@ -30,9 +29,6 @@ public:
 	void translate(glm::vec3 translation);
 
 private:
-	void makeVAO();
-
-	unsigned int VAO, EBO, VBO;
 
 	std::vector<float> vertexData = {
 		//  xyz, normal,uv	
