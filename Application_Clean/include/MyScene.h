@@ -25,6 +25,7 @@ private:
 	std::shared_ptr<Cube> m_cube;
 	std::shared_ptr<Plane> m_plane;
 	std::shared_ptr<Shader> m_myShader;
+	std::shared_ptr<Shader> m_postProcessing;
 	std::shared_ptr<DirectionalLight> m_directionalLight;
 	std::shared_ptr<PointLight> m_pointLight;
 	std::shared_ptr<SpotLight> m_spotLight;

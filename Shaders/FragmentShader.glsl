@@ -56,22 +56,20 @@ vec3 getSpotLight();
 
 void main()
 {
-
-	vec3 result = getDirectionalLight();
-	result += getPointLight();
-	result += getSpotLight();
-	FragColor = vec4(result, 1.0); //RGBA
-	//FragColor = texture(specularMap, uv);
-
-}
-
-vec3 getDirectionalLight()
-{
 	if (useNM != 0) {
 		n = texture(normalMap, uv).rgb;
 		n = n * 2.0 - 1.0;
 		n = normalize(TBN * n);
 	}
+	vec3 result = getDirectionalLight();
+	result += getPointLight();
+	result += getSpotLight();
+	FragColor = vec4(result, 1.0); //RGBA
+
+}
+
+vec3 getDirectionalLight()
+{
 
 	vec3 objCol = texture(diffuseMap, uv).rgb;
 	float specStrength = texture(specularMap, uv).r;
@@ -93,11 +91,6 @@ vec3 getDirectionalLight()
 
 vec3 getPointLight()
 {
-	if (useNM != 0) {
-		n = texture(normalMap, uv).rgb;
-		n = n * 2.0 - 1.0;
-		n = normalize(TBN * n);
-	}
 
 	vec3 objCol = texture(diffuseMap, uv).rgb;
 	float specStrength = texture(specularMap, uv).r;
@@ -124,11 +117,6 @@ vec3 getPointLight()
 
 vec3 getSpotLight()
 {
-	if (useNM != 0) {
-		n = texture(normalMap, uv).rgb;
-		n = n * 2.0 - 1.0;
-		n = normalize(TBN * n);
-	}
 
 	vec3 objCol = texture(diffuseMap, uv).rgb;
 	float specStrength = texture(specularMap, uv).r;

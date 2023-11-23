@@ -57,7 +57,7 @@
     <ClCompile Include="src\Textures\TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Shape.cpp">
+    <ClCompile Include="include\FBOviewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -114,6 +114,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Textures\TextureManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FrameBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FBOviewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

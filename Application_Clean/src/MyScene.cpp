@@ -21,8 +21,6 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 	m_spotLight = std::make_shared<SpotLight>(glm::vec3(0.5, 1.0, 0.0),glm::vec3(0.0, 7.0, 0.0), glm::vec3(1.0, 0.027, 0.0028), glm::vec3(0.0, -1.0, 0.0), glm::vec2(glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f))));
 
 	m_directionalLight->setLightUniforms(m_myShader);
-	m_cube->setMaterialValues(m_myShader);
-	m_plane->setMaterialValues(m_myShader);
 	m_pointLight->setLightUniforms(m_myShader);
 	m_spotLight->setLightUniforms(m_myShader);
 
@@ -44,12 +42,14 @@ void MyScene::render()
 
 	glBindVertexArray(m_cube->getVAO());
 	m_cube->setTransform(m_myShader);
+	m_cube->setMaterialValues(m_myShader);
 	glDrawElements(GL_TRIANGLES, m_cube->getIndicesCount(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(m_plane->getVAO());
 	m_plane->setTransform(m_myShader);
+	m_plane->setMaterialValues(m_myShader);
 	glDrawElements(GL_TRIANGLES, m_plane->getIndicesCount(), GL_UNSIGNED_INT, 0); 
-	
+
 }
 
 void MyScene::update(float dt)
