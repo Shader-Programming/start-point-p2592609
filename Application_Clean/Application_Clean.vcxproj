@@ -145,7 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="include\FBOviewer.cpp" />
+    <ClCompile Include="src\FrameBuffer.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\Cube.cpp" />
     <ClCompile Include="src\EntryPoint.cpp" />
@@ -156,6 +156,7 @@
     <ClCompile Include="src\Lights\PointLight.cpp" />
     <ClCompile Include="src\Lights\SpotLight.cpp" />
     <ClCompile Include="src\MyScene.cpp" />
+    <ClCompile Include="src\PostProcessing.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Textures\stb_image.cpp" />
     <ClCompile Include="src\Textures\TextureManager.cpp" />
@@ -164,7 +165,6 @@
   <ItemGroup>
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Cube.h" />
-    <ClInclude Include="include\FBOviewer.h" />
     <ClInclude Include="include\FrameBuffer.h" />
     <ClInclude Include="include\Lights\SpotLight.h" />
     <ClInclude Include="include\Plane.h" />
@@ -175,6 +175,7 @@
     <ClInclude Include="include\Lights\Light.h" />
     <ClInclude Include="include\Lights\PointLight.h" />
     <ClInclude Include="include\MyScene.h" />
+    <ClInclude Include="include\PostProcessing.h" />
     <ClInclude Include="include\Properties.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\Shader.h" />
