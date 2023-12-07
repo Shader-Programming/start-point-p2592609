@@ -57,7 +57,7 @@
     <ClCompile Include="src\Textures\TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\PostProcessing.cpp">
+    <ClCompile Include="src\FBOquad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\FrameBuffer.cpp">
@@ -122,7 +122,7 @@
     <ClInclude Include="include\FrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\PostProcessing.h">
+    <ClInclude Include="include\FBOquad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

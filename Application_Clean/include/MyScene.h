@@ -8,7 +8,8 @@
 #include "Lights/PointLight.h"
 #include "Lights/SpotLight.h"
 #include "Textures/TextureManager.h"
-#include "PostProcessing.h"
+#include "FBOquad.h"
+#include "FrameBuffer.h"
 
 class MyScene : public Scene
 {
@@ -27,7 +28,8 @@ private:
 	std::shared_ptr<Plane> m_plane;
 	std::shared_ptr<Shader> m_myShader;
 	std::shared_ptr<Shader> m_ppShader;
-	std::shared_ptr<PostProcessing> m_postProcessing;
+	std::shared_ptr<FBOquad> m_postProcessing;
+	std::shared_ptr<FrameBuffer> m_postFBO;
 	std::shared_ptr<DirectionalLight> m_directionalLight;
 	std::shared_ptr<PointLight> m_pointLight;
 	std::shared_ptr<SpotLight> m_spotLight;

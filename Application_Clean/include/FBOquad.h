@@ -8,13 +8,14 @@
 #include <memory>
 #include "Shader.h"
 
-class PostProcessing
+class FBOquad
 {
 public:
-	PostProcessing(unsigned int texture);
-	~PostProcessing() {};
+	FBOquad();
+	~FBOquad() {};
 
-	void setMaterialValues(std::shared_ptr<Shader> shader);
+	void drawColAttachment(unsigned int texID);
+	void drawDepthAttachment(unsigned int texID);
 
 	unsigned int getIndicesCount() { return sizeof(quadIndices); }
 	unsigned int getVAO() { return VAO; }
@@ -22,7 +23,8 @@ public:
 private:
 	unsigned int VAO, EBO, VBO;
 
-	unsigned int m_texture;
+	std::shared_ptr<Shader> m_colShader;
+	std::shared_ptr<Shader> m_depthShader;
 
 	void makeVAO();
 

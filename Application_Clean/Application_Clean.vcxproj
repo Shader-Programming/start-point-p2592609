@@ -156,7 +156,7 @@
     <ClCompile Include="src\Lights\PointLight.cpp" />
     <ClCompile Include="src\Lights\SpotLight.cpp" />
     <ClCompile Include="src\MyScene.cpp" />
-    <ClCompile Include="src\PostProcessing.cpp" />
+    <ClCompile Include="src\FBOquad.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Textures\stb_image.cpp" />
     <ClCompile Include="src\Textures\TextureManager.cpp" />
@@ -175,7 +175,7 @@
     <ClInclude Include="include\Lights\Light.h" />
     <ClInclude Include="include\Lights\PointLight.h" />
     <ClInclude Include="include\MyScene.h" />
-    <ClInclude Include="include\PostProcessing.h" />
+    <ClInclude Include="include\FBOquad.h" />
     <ClInclude Include="include\Properties.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\Shader.h" />

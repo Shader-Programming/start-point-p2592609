@@ -10,20 +10,23 @@
 class FrameBuffer
 {
 public:
-	FrameBuffer(unsigned int numColourAttachments);
+	FrameBuffer(unsigned int numColourAttachments, bool createDepthTexture);
 	~FrameBuffer() {};
 
 	unsigned int getID() { return m_ID; }
 	unsigned int getColourAttachment() { return textureColour; }
+	unsigned int getDepthAttachment() { return textureDepth; }
 
 	void bind() { glBindFramebuffer(GL_FRAMEBUFFER, m_ID); }
-		static void bindDefault() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
-		static void clearColour();
-		static void clearDepth();
+	static void bindDefault() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+	static void clearColour();
+	static void clearDepth();
 
 private:
-	void init();
+	void createColourAttachment(bool doRbo);
+	void createDepthAttachment();
 	unsigned int m_ID;
 	unsigned int m_numColourAttachments;
 	unsigned int textureColour;
+	unsigned int textureDepth;
 };
