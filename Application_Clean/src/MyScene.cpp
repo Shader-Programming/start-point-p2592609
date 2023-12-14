@@ -19,14 +19,14 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 	m_directionalLight = std::make_shared<DirectionalLight>(glm::vec3(1.0), glm::vec3(0.0f, -1.0f, 0.0f));
 	m_cube = std::make_shared<Cube>(cubeDiff, cubeSpec, cubeNorm, 16);
 	m_plane = std::make_shared<Plane>(floorDiff, floorSpec, floorNorm, 16);
-	m_pointLight = std::make_shared<PointLight>(glm::vec3(1.0, 1.0, 1.0), glm::vec3(-2.0, 0.0, 0.0), glm::vec3(1.0, 0.22, 0.02));
 	m_spotLight = std::make_shared<SpotLight>(glm::vec3(0.5, 1.0, 0.0),glm::vec3(0.0, 7.0, 0.0), glm::vec3(1.0, 0.027, 0.0028), glm::vec3(0.0, -1.0, 0.0), glm::vec2(glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f))));
 
+	addPointLights(50);
+
 	m_directionalLight->setLightUniforms(m_myShader);
-	m_pointLight->setLightUniforms(m_myShader);
 	m_spotLight->setLightUniforms(m_myShader);
 
-	m_postFBO = std::make_shared<FrameBuffer>(1, true);
+	m_postFBO = std::make_shared<FrameBuffer>(1, false);
 
 	m_postProcessing = std::make_shared<FBOquad>();
 
@@ -35,12 +35,13 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 
 void MyScene::render()
 {
-	glDepthMask(GL_FALSE);
-	glDepthFunc(GL_EQUAL);
+	/*glDepthMask(GL_FALSE);
+	glDepthFunc(GL_EQUAL);*/
+
+	glEnable(GL_DEPTH_TEST);
 
 	m_postFBO->bind();
 	m_postFBO->clearColour();
-
 
 	m_myShader->use();
 
@@ -61,8 +62,8 @@ void MyScene::render()
 	glDrawElements(GL_TRIANGLES, m_plane->getIndicesCount(), GL_UNSIGNED_INT, 0); 
 
 
-	glDepthMask(GL_TRUE);
-	glDepthFunc(GL_LESS);
+	/*glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LESS);*/
 
 	m_postFBO->bindDefault();
 	m_postProcessing->drawColAttachment(m_postFBO->getColourAttachment());
@@ -119,6 +120,20 @@ void MyScene::setHandler(bool handler)
 		m_camera->attachHandler(m_window, nullptr);
 		m_cube->attachHandler(m_handler);
 		ab = false;
+	}
+}
+
+void MyScene::addPointLights(int numLights)
+{
+	
+	for (int i = 0; i < numLights; i++)
+	{
+		/*glm::vec3 col = glm::vec3((rand() % 100)/ 100, (rand() % 100) / 100, (rand() % 100) / 100);
+		glm::vec3 pos = glm::vec3((rand() % 100), (rand() % 100), (rand() % 100) / 100);*/
+		glm::vec3 col = glm::vec3(1.f, 0.5f, 0.f);
+		glm::vec3 pos = glm::vec3(1.f, 1.f, 1.f);
+		m_pointLight.emplace_back(PointLight(col, pos, glm::vec3(1.0, 0.22, 0.02)));
+		m_pointLight[i].setLightUniforms(m_myShader, i);
 	}
 }
 

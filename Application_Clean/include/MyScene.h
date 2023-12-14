@@ -10,6 +10,7 @@
 #include "Textures/TextureManager.h"
 #include "FBOquad.h"
 #include "FrameBuffer.h"
+#include <vector>
 
 class MyScene : public Scene
 {
@@ -18,7 +19,7 @@ public:
 	~MyScene() {};
 	void update(float dt);
 	void setHandler(bool handler);
-
+	void addPointLights(int numLights);
 
 private:
 
@@ -31,7 +32,7 @@ private:
 	std::shared_ptr<FBOquad> m_postProcessing;
 	std::shared_ptr<FrameBuffer> m_postFBO;
 	std::shared_ptr<DirectionalLight> m_directionalLight;
-	std::shared_ptr<PointLight> m_pointLight;
+	std::vector<PointLight> m_pointLight;
 	std::shared_ptr<SpotLight> m_spotLight;
 	glm::mat4 m_view, m_projection;
 

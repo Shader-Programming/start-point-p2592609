@@ -32,5 +32,5 @@ void main()
   /*  vec3 grayscale = vec3(.5, .5, .5);
     result += vec3(dot(texture(defaultTexture, uv).rgb, grayscale));*/
     result = result / numWeights;;
-    FragColor = vec4(1 - result, 1.0);
+    FragColor = vec4(result, 1.0);
 }

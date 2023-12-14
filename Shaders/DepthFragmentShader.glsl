@@ -13,7 +13,9 @@ const float far_plane = 100;
 void main()
 { 
     float depth = texture(image, uv).r ;
+
     FragColor = vec4(vec3(LinearizeDepth(depth) ), 1.0);
+    //FragColor = vec4(1.f, 0.f, 1.f, 1.f);
 }
 
    // required when using a perspective projection matrix

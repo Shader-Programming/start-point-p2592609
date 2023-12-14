@@ -26,9 +26,9 @@ uniform vec3 lightDirection;
 uniform float ambientFactor;
 
 //Point Light
-uniform vec3 plightPosition;
-uniform vec3 plightColour;
-uniform vec3 pAttentuation;
+//uniform vec3 plightPosition;
+//uniform vec3 plightColour;
+//uniform vec3 pAttentuation;
 
 //Spot Light
 uniform vec3 slightPosition;
@@ -37,20 +37,20 @@ uniform vec3 sAttentuation;
 uniform vec3 sDirection;
 uniform vec2 sRadii;
 
-//struct pointLight {
-	//vec3 colour;
-	//vec3 position;
-	//vec3 constants;
-//};
+struct pointLight {
+	vec3 plightPosition;
+	vec3 plightColour;
+	vec3 pAttentuation;
+};
 
-//#define numPL 2
-//uniform pointLight[numPL];
+#define numPL 50
+uniform pointLight pLights[numPL];
 
 vec3 n = normalize(normal);
 vec3 viewDir = normalize(viewPos - posInWS);
 
 vec3 getDirectionalLight();
-vec3 getPointLight();
+vec3 getPointLight(int i);
 vec3 getSpotLight();
 
 
@@ -62,7 +62,10 @@ void main()
 		n = normalize(TBN * n);
 	}
 	vec3 result = getDirectionalLight();
-	result += getPointLight();
+	for (int i = 0; i < numPL; i++)
+	{
+		result += getPointLight(i);
+	}
 	result += getSpotLight();
 	FragColor = vec4(result, 1.0); //RGBA
 
@@ -89,26 +92,26 @@ vec3 getDirectionalLight()
 	return ambient + diffuse + specular;
 }
 
-vec3 getPointLight()
+vec3 getPointLight(int i)
 {
 
 	vec3 objCol = texture(diffuseMap, uv).rgb;
 	float specStrength = texture(specularMap, uv).r;
+	
+	float distance = length(pLights[i].plightPosition - posInWS);
+	float attn = 1.0/(pLights[i].pAttentuation.x + (pLights[i].pAttentuation.y*distance) + (pLights[i].pAttentuation.z*(distance*distance)));
 
-	float distance = length(plightPosition - posInWS);
-	float attn = 1.0/(pAttentuation.x + (pAttentuation.y*distance) + (pAttentuation.z*(distance*distance)));
-
-	vec3 lightDir = normalize((plightPosition - posInWS));
+	vec3 lightDir = normalize((pLights[i].plightPosition - posInWS));
 
 	float diffuseFactor = dot(n, lightDir);
 	diffuseFactor = max(diffuseFactor, 0.0f);
-	vec3 diffuse = objCol * plightColour * diffuseFactor;
+	vec3 diffuse = objCol * pLights[i].plightColour * diffuseFactor;
 
 	vec3 H = normalize(lightDir + viewDir);
 	float specLevel = dot(n, H);
 	specLevel = max(specLevel, 0.0);
 	specLevel = pow(specLevel, shine);
-	vec3 specular = plightColour * specLevel * specStrength;
+	vec3 specular = pLights[i].plightColour * specLevel * specStrength;
 
 	diffuse = diffuse * attn;
 	specular = specular * attn;

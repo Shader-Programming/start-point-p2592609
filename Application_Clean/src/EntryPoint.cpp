@@ -12,7 +12,7 @@ Runs game loop
 
 void main() {
 
-	WindowManager windowMan("IMAT3906 Labs", SCR_WIDTH, SCR_HEIGHT, true);  // name, width, height, vSync,
+	WindowManager windowMan("IMAT3906 Labs", SCR_WIDTH, SCR_HEIGHT, false);  // name, width, height, vSync,
 	MyScene scene(windowMan.getWindow(), windowMan.getHandler()); // pass GLFWwindow and Input Handler to scene
 
 	while (!glfwWindowShouldClose(windowMan.getWindow())) {

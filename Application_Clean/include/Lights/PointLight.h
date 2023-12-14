@@ -10,7 +10,7 @@ public:
 	PointLight(glm::vec3 colour, glm::vec3 position, glm::vec3 constants);
 	~PointLight() {};
 
-	void setLightUniforms(std::shared_ptr<Shader> shader);
+	void setLightUniforms(std::shared_ptr<Shader> shader, int i);
 
 	void setConstants(glm::vec3& constants) { m_constants = constants; }
 	void setPosition(glm::vec3& pos) { m_position = pos; }
