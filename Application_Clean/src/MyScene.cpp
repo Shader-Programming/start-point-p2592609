@@ -17,11 +17,22 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 	m_ppShader = std::make_shared<Shader>("..\\Shaders\\PostProcessingVertexShader.glsl", "..\\Shaders\\PostProcessingFragmentShader.glsl");
 
 	m_directionalLight = std::make_shared<DirectionalLight>(glm::vec3(1.0), glm::vec3(0.0f, -1.0f, 0.0f));
-	m_cube = std::make_shared<Cube>(cubeDiff, cubeSpec, cubeNorm, 16);
+	m_cube = std::make_shared<Cube>(cubeDiff, cubeSpec, cubeNorm, 16, true);
+	m_cube2 = std::make_shared<Cube>(cubeDiff, cubeSpec, cubeNorm, 16, false);
+	m_cube2->translate(glm::vec3(1.f, 2.f, 2.f));
 	m_plane = std::make_shared<Plane>(floorDiff, floorSpec, floorNorm, 16);
-	m_spotLight = std::make_shared<SpotLight>(glm::vec3(0.5, 1.0, 0.0),glm::vec3(0.0, 7.0, 0.0), glm::vec3(1.0, 0.027, 0.0028), glm::vec3(0.0, -1.0, 0.0), glm::vec2(glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f))));
+	m_spotLight = std::make_shared<SpotLight>(glm::vec3(1.0, 1.0, 1.0),glm::vec3(0.0, 7.0, 0.0), glm::vec3(1.0, 0.045, 0.0075), glm::vec3(0.0, -1.0, 0.0), glm::vec2(glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f))));
 
-	addPointLights(50);
+	//addPointLights(1);
+	m_pointLight.emplace_back(PointLight(glm::vec3(1.0, 0.0, 1.0), glm::vec3(-2.0, 0.0, 0.0), glm::vec3(1.0, 0.045, 0.0075)));
+	m_myShader->use();
+	m_myShader->setVec3("plightPosition", glm::vec3(-2.0, 0.0, 0.0));
+	m_myShader->setVec3("plightColour", glm::vec3(1.0, 0.0, 1.0));
+	m_myShader->setVec3("pAttentuation", glm::vec3(1.0, 0.045, 0.0075));
+
+	/*m_myShader->setVec3("pLights[0].plightPosition", glm::vec3(-2.0, 0.0, 0.0));
+	m_myShader->setVec3("pLights[0].plightColour", glm::vec3(1.0, 0.0, 1.0));
+	m_myShader->setVec3("pLights[0].pAttentuation", glm::vec3(1.0, 0.045, 0.0075));*/
 
 	m_directionalLight->setLightUniforms(m_myShader);
 	m_spotLight->setLightUniforms(m_myShader);
@@ -50,18 +61,25 @@ void MyScene::render()
 	m_myShader->setMat4("Projection", m_projection = m_camera->getProjectionMatrix());
 	m_myShader->setVec3("viewPos", m_camera->getPosition());
 	m_myShader->setInt("useNM", useNM);
+	m_myShader->setVec3("slightPosition", m_camera->getPosition());
+	m_myShader->setVec3("sDirection", m_camera->getFront());
 
 	glBindVertexArray(m_cube->getVAO());
 	m_cube->setTransform(m_myShader);
 	m_cube->setMaterialValues(m_myShader);
 	glDrawElements(GL_TRIANGLES, m_cube->getIndicesCount(), GL_UNSIGNED_INT, 0);
 
+	glBindVertexArray(m_cube2->getVAO());
+	m_cube2->setTransform(m_myShader);
+	m_cube2->setMaterialValues(m_myShader);
+	glDrawElements(GL_TRIANGLES, m_cube2->getIndicesCount(), GL_UNSIGNED_INT, 0);
+
 	glBindVertexArray(m_plane->getVAO());
 	m_plane->setTransform(m_myShader);
 	m_plane->setMaterialValues(m_myShader);
 	glDrawElements(GL_TRIANGLES, m_plane->getIndicesCount(), GL_UNSIGNED_INT, 0); 
 
-
+	
 	/*glDepthMask(GL_TRUE);
 	glDepthFunc(GL_LESS);*/
 
@@ -103,7 +121,7 @@ void MyScene::update(float dt)
 	
 	render();
 
-
+	m_cube2->rotate(1.f, glm::vec3(0.0f, 1.0f, 0.0f));
 	
 }
 
@@ -125,15 +143,20 @@ void MyScene::setHandler(bool handler)
 
 void MyScene::addPointLights(int numLights)
 {
-	
+	glm::vec3 col = glm::vec3(1.0, 1.0, 1.0);
+	glm::vec3 pos = glm::vec3(-2.0, 0.0, 0.0);
 	for (int i = 0; i < numLights; i++)
 	{
 		/*glm::vec3 col = glm::vec3((rand() % 100)/ 100, (rand() % 100) / 100, (rand() % 100) / 100);
 		glm::vec3 pos = glm::vec3((rand() % 100), (rand() % 100), (rand() % 100) / 100);*/
-		glm::vec3 col = glm::vec3(1.f, 0.5f, 0.f);
-		glm::vec3 pos = glm::vec3(1.f, 1.f, 1.f);
-		m_pointLight.emplace_back(PointLight(col, pos, glm::vec3(1.0, 0.22, 0.02)));
+		
+		m_pointLight.emplace_back(PointLight(col, pos, glm::vec3(1.0, 0.045, 0.0075)));
 		m_pointLight[i].setLightUniforms(m_myShader, i);
+		//m_myShader->use();
+		//m_myShader->setVec3("pLights[0].plightPosition", pos);
+		//m_myShader->setVec3("pLights[0].plightColour", col);
+		//m_myShader->setVec3("pLights[0].pAttentuation", glm::vec3(1.0, 0.045, 0.0075));
+
 	}
 }
 

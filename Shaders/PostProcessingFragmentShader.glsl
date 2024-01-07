@@ -15,7 +15,7 @@ void main()
 
 	//vec3 result = texture(defaultTexture, uv).rgb;
 	//FragColor = vec4(result, 1.0);
-
+    
     vec2 tex_offset = 1.0 / textureSize(defaultTexture, 0); // gets size of single texel
     vec3 result = texture(defaultTexture, uv).rgb * weight[0];
     for (int i = 1; i < numWeights; ++i)
@@ -29,8 +29,8 @@ void main()
         result += texture(defaultTexture, uv - vec2(0.0, tex_offset.y * i)).rgb * weight[i];
     }
 
-  /*  vec3 grayscale = vec3(.5, .5, .5);
-    result += vec3(dot(texture(defaultTexture, uv).rgb, grayscale));*/
-    result = result / numWeights;;
+    //vec3 grayscale = vec3(.5, .5, .5);
+    //vec3 result = vec3(dot(texture(defaultTexture, uv).rgb, grayscale));
+    result = result / numWeights;
     FragColor = vec4(result, 1.0);
 }

@@ -26,9 +26,9 @@ uniform vec3 lightDirection;
 uniform float ambientFactor;
 
 //Point Light
-//uniform vec3 plightPosition;
-//uniform vec3 plightColour;
-//uniform vec3 pAttentuation;
+uniform vec3 plightPosition;
+uniform vec3 plightColour;
+uniform vec3 pAttentuation;
 
 //Spot Light
 uniform vec3 slightPosition;
@@ -37,14 +37,15 @@ uniform vec3 sAttentuation;
 uniform vec3 sDirection;
 uniform vec2 sRadii;
 
-struct pointLight {
+/*struct pointLight {
 	vec3 plightPosition;
 	vec3 plightColour;
 	vec3 pAttentuation;
-};
+}; 
 
 #define numPL 50
 uniform pointLight pLights[numPL];
+*/
 
 vec3 n = normalize(normal);
 vec3 viewDir = normalize(viewPos - posInWS);
@@ -56,23 +57,29 @@ vec3 getSpotLight();
 
 void main()
 {
-	if (useNM != 0) {
-		n = texture(normalMap, uv).rgb;
-		n = n * 2.0 - 1.0;
-		n = normalize(TBN * n);
-	}
+	vec3 n = normalize(normal);
+	vec3 viewDir = normalize(viewPos - posInWS);
+
 	vec3 result = getDirectionalLight();
-	for (int i = 0; i < numPL; i++)
+	/*for (int i = 0; i < numPL; i++)
 	{
-		result += getPointLight(i);
-	}
+		//result = result + getPointLight(i);
+	}*/
+	result += getPointLight(0);
 	result += getSpotLight();
 	FragColor = vec4(result, 1.0); //RGBA
+	//FragColor = texture(normalMap, uv); //RGBA
 
 }
 
 vec3 getDirectionalLight()
 {
+
+	if (useNM != 0) {
+		n = texture(normalMap, uv).rgb;
+		n = n * 2.0 - 1.0;
+		n = normalize(TBN * n);
+	}
 
 	vec3 objCol = texture(diffuseMap, uv).rgb;
 	float specStrength = texture(specularMap, uv).r;
@@ -95,9 +102,15 @@ vec3 getDirectionalLight()
 vec3 getPointLight(int i)
 {
 
-	vec3 objCol = texture(diffuseMap, uv).rgb;
+	if (useNM != 0) {
+		n = texture(normalMap, uv).rgb;
+		n = n * 2.0 - 1.0;
+		n = normalize(TBN * n);
+	}
+
+	/*vec3 objCol = texture(diffuseMap, uv).rgb;
 	float specStrength = texture(specularMap, uv).r;
-	
+
 	float distance = length(pLights[i].plightPosition - posInWS);
 	float attn = 1.0/(pLights[i].pAttentuation.x + (pLights[i].pAttentuation.y*distance) + (pLights[i].pAttentuation.z*(distance*distance)));
 
@@ -115,25 +128,56 @@ vec3 getPointLight(int i)
 
 	diffuse = diffuse * attn;
 	specular = specular * attn;
+	return diffuse + specular; 
+	*/
+	
+	
+	vec3 objCol = texture(diffuseMap, uv).rgb;
+	float specStrength = texture(specularMap, uv).r;
+
+	float distance = length(plightPosition - posInWS);
+	float attn = 1.0/(pAttentuation.x + (pAttentuation.y*distance) + (pAttentuation.z*(distance*distance)));
+
+	vec3 lightDir = normalize((plightPosition - posInWS));
+
+	float diffuseFactor = dot(n, lightDir);
+	diffuseFactor = max(diffuseFactor, 0.0f);
+	vec3 diffuse = objCol * plightColour * diffuseFactor;
+
+	vec3 H = normalize(lightDir + viewDir);
+	float specLevel = dot(n, H);
+	specLevel = max(specLevel, 0.0);
+	specLevel = pow(specLevel, shine);
+	vec3 specular = plightColour * specLevel * specStrength;
+
+	diffuse = diffuse * attn;
+	specular = specular * attn;
 	return diffuse + specular;
+	
 }
 
 vec3 getSpotLight()
 {
 
+	if (useNM != 0) {
+		n = texture(normalMap, uv).rgb;
+		n = n * 2.0 - 1.0;
+		n = normalize(TBN * n);
+	}
+
 	vec3 objCol = texture(diffuseMap, uv).rgb;
 	float specStrength = texture(specularMap, uv).r;
 
 	float distance = length(slightPosition - posInWS);
-	float attn = 1.0 / (sAttentuation.x + (sAttentuation.y * distance) + (sAttentuation.z * (distance * distance)));
+	float attn = 1.0/(sAttentuation.x + (sAttentuation.y*distance) + (sAttentuation.z*(distance*distance)));
 
-	vec3 slightDir = normalize((slightPosition - posInWS));
+	vec3 lightDir = normalize((slightPosition - posInWS));
 
-	float diffuseFactor = dot(n, slightDir);
+	float diffuseFactor = dot(n, lightDir);
 	diffuseFactor = max(diffuseFactor, 0.0f);
 	vec3 diffuse = objCol * slightColour * diffuseFactor;
 
-	vec3 H = normalize(slightDir + viewDir);
+	vec3 H = normalize(lightDir + viewDir);
 	float specLevel = dot(n, H);
 	specLevel = max(specLevel, 0.0);
 	specLevel = pow(specLevel, shine);
@@ -142,7 +186,7 @@ vec3 getSpotLight()
 	diffuse = diffuse * attn;
 	specular = specular * attn;
 
-	float theta = dot(-slightDir, normalize(slightDir));
+	float theta = dot(-lightDir, normalize(sDirection));
 	float denom = (sRadii.x - sRadii.y);
 	float intensity = (theta - sRadii.y) / denom;
 	intensity = clamp(intensity, 0.0, 1.0);

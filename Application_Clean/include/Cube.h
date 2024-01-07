@@ -14,7 +14,7 @@
 class Cube : public Shape
 {
 public:
-	Cube(unsigned int diffTexture, unsigned int specTexture, unsigned int normalTexture, float shine);
+	Cube(unsigned int diffTexture, unsigned int specTexture, unsigned int normalTexture, float shine, bool isPlayer);
 	~Cube();
 
 	void setMaterialValues(std::shared_ptr<Shader> shader) override;
@@ -36,6 +36,8 @@ private:
 	unsigned int m_diffuseMap;
 	unsigned int m_specularMap;
 	unsigned int m_normalMap;
+
+	bool player;
 
 	void makeVAO() override;
 

@@ -26,6 +26,8 @@ private:
 	void render();
 
 	std::shared_ptr<Cube> m_cube;
+	std::shared_ptr<Cube> m_cube2;
+	
 	std::shared_ptr<Plane> m_plane;
 	std::shared_ptr<Shader> m_myShader;
 	std::shared_ptr<Shader> m_ppShader;

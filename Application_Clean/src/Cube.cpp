@@ -1,6 +1,6 @@
 #include "Cube.h"
 
-Cube::Cube(unsigned int diffTexture, unsigned int specTexture, unsigned int normalTexture, float shine) : m_diffuseMap(diffTexture), m_specularMap(specTexture), m_normalMap(normalTexture), m_shine(shine)
+Cube::Cube(unsigned int diffTexture, unsigned int specTexture, unsigned int normalTexture, float shine, bool isPlayer) : m_diffuseMap(diffTexture), m_specularMap(specTexture), m_normalMap(normalTexture), m_shine(shine), player(isPlayer)
 {
 	makeVAO();
 	resetTransform();
@@ -31,24 +31,28 @@ void Cube::setMaterialValues(std::shared_ptr<Shader> shader)
 void Cube::update(float dt)
 {
 	float vel = 5.0f * dt;
+	if (player)
+	{
+		if (m_handler != nullptr)
+		{
+			if (m_handler->keyHasBeenPressed()) {
+				if (m_handler->isKeyPressed(GLFW_KEY_W)) {
+					translate(glm::vec3(0.0, 0.0, 1.0) * vel);
+				}
+				if (m_handler->isKeyPressed(GLFW_KEY_S)) {
+					translate(glm::vec3(0.0, 0.0, -1.0) * vel);
+				}
+				if (m_handler->isKeyPressed(GLFW_KEY_A)) {
+					translate(glm::vec3(-1.0, 0.0, 0.0) * vel);
+				}
+				if (m_handler->isKeyPressed(GLFW_KEY_D)) {
+					translate(glm::vec3(1.0, 0.0, 0.0) * vel);
+				}
+			}
 
-	if (m_handler->keyHasBeenPressed()) {
-		if (m_handler->isKeyPressed(GLFW_KEY_W)) {
-			translate(glm::vec3(0.0, 0.0, 1.0) * vel);
-		}
-		if (m_handler->isKeyPressed(GLFW_KEY_S)) {
-			translate(glm::vec3(0.0, 0.0, -1.0) * vel);
-		}
-		if (m_handler->isKeyPressed(GLFW_KEY_A)) {
-			translate(glm::vec3(-1.0, 0.0, 0.0) * vel);
-		}
-		if (m_handler->isKeyPressed(GLFW_KEY_D)) {
-			translate(glm::vec3(1.0, 0.0, 0.0)* vel);
+			m_handler->endFrame();  // reset delta values
 		}
 	}
-
-	m_handler->endFrame();  // reset delta values
-
 }
 
 void Cube::attachHandler(std::shared_ptr<InputHandler> H)
