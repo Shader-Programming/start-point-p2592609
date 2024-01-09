@@ -38,7 +38,6 @@ private:
 	std::shared_ptr<Plane> m_plane3;
 
 	std::shared_ptr<Shader> m_myShader;
-	std::shared_ptr<Shader> m_ppShader;
 	std::shared_ptr<Shader> m_depthShader;
 	std::shared_ptr<FBOquad> m_postProcessing;
 	std::shared_ptr<FrameBuffer> m_postFBO;

@@ -14,7 +14,6 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 	unsigned int floorNorm = TextureManager::loadTexture("..\\Resources\\normalFloor.jpg");
 
 	m_myShader = std::make_shared<Shader>("..\\Shaders\\VertexShader.glsl", "..\\Shaders\\FragmentShader.glsl");
-	m_ppShader = std::make_shared<Shader>("..\\Shaders\\PostProcessingVertexShader.glsl", "..\\Shaders\\PostProcessingFragmentShader.glsl");
 	m_depthShader = std::make_shared<Shader>("..\\Shaders\\DepthVertexShader.glsl", "..\\Shaders\\emptyFragmentShader.glsl");
 
 	m_directionalLight = std::make_shared<DirectionalLight>(glm::vec3(1.0), glm::vec3(0.0f, -1.0f, 0.0f));
@@ -51,14 +50,10 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 }
 
 void MyScene::render()
-{
-
-	
+{	
 	m_postFBO->bind();
 	glEnable(GL_DEPTH_TEST);
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	m_postFBO->clearColour();
-
+	m_postFBO->clear();
 
 	m_depthShader->use();
 
@@ -67,15 +62,11 @@ void MyScene::render()
 
 	renderGeo();
 
-
 	glDepthMask(GL_FALSE);
 	glDepthFunc(GL_EQUAL);
-	
 
 	m_postFBO->bindDefault();
-	glDisable(GL_DEPTH_TEST);
-	m_postFBO->clearColour();
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	m_postFBO->clear();
 
 	m_myShader->use();
 
@@ -90,6 +81,7 @@ void MyScene::render()
 	renderGeo();
 
 
+	glDisable(GL_DEPTH_TEST);
 	m_postProcessing->drawColAttachment(m_postFBO->getColourAttachment());
 	//m_postProcessing->drawDepthAttachment(m_postFBO->getDepthAttachment());
 

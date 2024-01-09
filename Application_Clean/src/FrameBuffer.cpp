@@ -13,7 +13,7 @@ FrameBuffer::FrameBuffer(unsigned int numColourAttachments, bool createDepthText
 	else if (m_numColourAttachments > 0 && createDepthTexture)
 	{
 		createColourAttachment(false);
-		createDepthAttachment();
+		//createDepthAttachment();
 	}
 	else
 	{
@@ -22,18 +22,14 @@ FrameBuffer::FrameBuffer(unsigned int numColourAttachments, bool createDepthText
 	}
 }
 
-void FrameBuffer::clearColour()
+void FrameBuffer::clear()
 {
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void FrameBuffer::clearDepth()
-{
 }
 
 void FrameBuffer::createColourAttachment(bool doRbo)
 {
-
 	glGenFramebuffers(1, &m_ID);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
 
@@ -58,8 +54,8 @@ void FrameBuffer::createColourAttachment(bool doRbo)
 	}
 	else if (!doRbo)
 	{
-		glGenFramebuffers(1, &m_ID);
-		glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
+		//glGenFramebuffers(1, &m_ID);
+		//glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
 
 		glGenTextures(1, &textureDepth);
 		glBindTexture(GL_TEXTURE_2D, textureDepth);
@@ -67,7 +63,6 @@ void FrameBuffer::createColourAttachment(bool doRbo)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glBindTexture(GL_TEXTURE_2D, 0);
-
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, textureDepth, 0);
 	}

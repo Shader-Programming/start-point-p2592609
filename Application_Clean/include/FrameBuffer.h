@@ -19,8 +19,8 @@ public:
 
 	void bind() { glBindFramebuffer(GL_FRAMEBUFFER, m_ID); }
 	static void bindDefault() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
-	static void clearColour();
-	static void clearDepth();
+	static void clear();
+
 
 private:
 	void createColourAttachment(bool doRbo);
