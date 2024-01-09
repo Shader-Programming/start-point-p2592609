@@ -65,9 +65,6 @@ void MyScene::render()
 	glDepthMask(GL_FALSE);
 	glDepthFunc(GL_EQUAL);
 
-	m_postFBO->bindDefault();
-	m_postFBO->clear();
-
 	m_myShader->use();
 
 	//set uniforms
@@ -80,6 +77,8 @@ void MyScene::render()
 
 	renderGeo();
 
+	m_postFBO->bindDefault();
+	m_postFBO->clear();
 
 	glDisable(GL_DEPTH_TEST);
 	m_postProcessing->drawColAttachment(m_postFBO->getColourAttachment());
