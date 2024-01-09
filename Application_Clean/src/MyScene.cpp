@@ -15,6 +15,7 @@ MyScene::MyScene(GLFWwindow* window, std::shared_ptr<InputHandler> H) : Scene(wi
 
 	m_myShader = std::make_shared<Shader>("..\\Shaders\\VertexShader.glsl", "..\\Shaders\\FragmentShader.glsl");
 	m_ppShader = std::make_shared<Shader>("..\\Shaders\\PostProcessingVertexShader.glsl", "..\\Shaders\\PostProcessingFragmentShader.glsl");
+	m_depthShader = std::make_shared<Shader>("..\\Shaders\\DepthVertexShader.glsl", "..\\Shaders\\emptyFragmentShader.glsl");
 
 	m_directionalLight = std::make_shared<DirectionalLight>(glm::vec3(1.0), glm::vec3(0.0f, -1.0f, 0.0f));
 
@@ -59,7 +60,22 @@ void MyScene::render()
 	m_postFBO->clearColour();
 
 
+	m_depthShader->use();
 
+	m_depthShader->setMat4("View", m_view = m_camera->getViewMatrix());
+	m_depthShader->setMat4("Projection", m_projection = m_camera->getProjectionMatrix());
+
+	renderGeo();
+
+
+	glDepthMask(GL_FALSE);
+	glDepthFunc(GL_EQUAL);
+	
+
+	m_postFBO->bindDefault();
+	glDisable(GL_DEPTH_TEST);
+	m_postFBO->clearColour();
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
 	m_myShader->use();
 
@@ -71,6 +87,20 @@ void MyScene::render()
 	m_myShader->setVec3("slightPosition", m_camera->getPosition());
 	m_myShader->setVec3("sDirection", m_camera->getFront());
 
+	renderGeo();
+
+
+	m_postProcessing->drawColAttachment(m_postFBO->getColourAttachment());
+	//m_postProcessing->drawDepthAttachment(m_postFBO->getDepthAttachment());
+
+	glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LESS);
+
+
+}
+
+void MyScene::renderGeo()
+{
 	glBindVertexArray(m_cube->getVAO());
 	m_cube->setTransform(m_myShader);
 	m_cube->setMaterialValues(m_myShader);
@@ -92,7 +122,7 @@ void MyScene::render()
 	glBindVertexArray(m_plane->getVAO());
 	m_plane->setTransform(m_myShader);
 	m_plane->setMaterialValues(m_myShader);
-	glDrawElements(GL_TRIANGLES, m_plane->getIndicesCount(), GL_UNSIGNED_INT, 0); 
+	glDrawElements(GL_TRIANGLES, m_plane->getIndicesCount(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(m_plane2->getVAO());
 	m_plane2->setTransform(m_myShader);
@@ -103,22 +133,6 @@ void MyScene::render()
 	m_plane3->setTransform(m_myShader);
 	m_plane3->setMaterialValues(m_myShader);
 	glDrawElements(GL_TRIANGLES, m_plane3->getIndicesCount(), GL_UNSIGNED_INT, 0);
-
-
-	glDepthMask(GL_FALSE);
-	glDepthFunc(GL_EQUAL);
-	
-	m_postFBO->bindDefault();
-	glDisable(GL_DEPTH_TEST);
-	m_postFBO->clearColour();
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	m_postProcessing->drawColAttachment(m_postFBO->getColourAttachment());
-	m_postProcessing->drawDepthAttachment(m_postFBO->getDepthAttachment());
-
-	glDepthMask(GL_TRUE);
-	glDepthFunc(GL_LESS);
-
-
 }
 
 void MyScene::update(float dt)

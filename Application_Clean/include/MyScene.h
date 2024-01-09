@@ -26,6 +26,7 @@ public:
 private:
 
 	void render();
+	void renderGeo();
 
 	std::shared_ptr<Cube> m_cube;
 	std::shared_ptr<Cube> m_cube2;
@@ -38,6 +39,7 @@ private:
 
 	std::shared_ptr<Shader> m_myShader;
 	std::shared_ptr<Shader> m_ppShader;
+	std::shared_ptr<Shader> m_depthShader;
 	std::shared_ptr<FBOquad> m_postProcessing;
 	std::shared_ptr<FrameBuffer> m_postFBO;
 	std::shared_ptr<DirectionalLight> m_directionalLight;
