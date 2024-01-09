@@ -20,6 +20,10 @@ public:
 	unsigned int getIndicesCount() { return indices.size(); }
 	unsigned int getVAO() { return VAO; }
 
+	void rotate(float angle, glm::vec3 axis);
+	void scale(float scaleFactor, glm::vec3 axis);
+	void translate(glm::vec3 translation);
+
 private:
 	unsigned int VAO, EBO, VBO;
 
@@ -31,7 +35,7 @@ private:
 	void makeVAO() override;
 
 	const float floorLevel = -2.0f; 
-	const float floorSize = 7.0f;
+	const float floorSize = 10.0f;
 
 	std::vector<float> vertexData = {
 	-floorSize, floorLevel,  -floorSize,     0.0, 1.0, 0.0, 0.0,0.0,1.0f, 0.0f, 0.0f,

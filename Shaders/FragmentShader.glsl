@@ -26,9 +26,9 @@ uniform vec3 lightDirection;
 uniform float ambientFactor;
 
 //Point Light
-uniform vec3 plightPosition;
-uniform vec3 plightColour;
-uniform vec3 pAttentuation;
+//uniform vec3 plightPosition;
+//uniform vec3 plightColour;
+//uniform vec3 pAttentuation;
 
 //Spot Light
 uniform vec3 slightPosition;
@@ -37,7 +37,7 @@ uniform vec3 sAttentuation;
 uniform vec3 sDirection;
 uniform vec2 sRadii;
 
-/*struct pointLight {
+struct pointLight {
 	vec3 plightPosition;
 	vec3 plightColour;
 	vec3 pAttentuation;
@@ -45,7 +45,7 @@ uniform vec2 sRadii;
 
 #define numPL 50
 uniform pointLight pLights[numPL];
-*/
+
 
 vec3 n = normalize(normal);
 vec3 viewDir = normalize(viewPos - posInWS);
@@ -61,11 +61,11 @@ void main()
 	vec3 viewDir = normalize(viewPos - posInWS);
 
 	vec3 result = getDirectionalLight();
-	/*for (int i = 0; i < numPL; i++)
+	for (int i = 0; i < numPL; i++)
 	{
-		//result = result + getPointLight(i);
-	}*/
-	result += getPointLight(0);
+		result += getPointLight(i);
+	}
+	//result += getPointLight(0);
 	result += getSpotLight();
 	FragColor = vec4(result, 1.0); //RGBA
 	//FragColor = texture(normalMap, uv); //RGBA
@@ -108,7 +108,7 @@ vec3 getPointLight(int i)
 		n = normalize(TBN * n);
 	}
 
-	/*vec3 objCol = texture(diffuseMap, uv).rgb;
+	vec3 objCol = texture(diffuseMap, uv).rgb;
 	float specStrength = texture(specularMap, uv).r;
 
 	float distance = length(pLights[i].plightPosition - posInWS);
@@ -129,9 +129,9 @@ vec3 getPointLight(int i)
 	diffuse = diffuse * attn;
 	specular = specular * attn;
 	return diffuse + specular; 
-	*/
 	
 	
+	/*
 	vec3 objCol = texture(diffuseMap, uv).rgb;
 	float specStrength = texture(specularMap, uv).r;
 
@@ -153,7 +153,7 @@ vec3 getPointLight(int i)
 	diffuse = diffuse * attn;
 	specular = specular * attn;
 	return diffuse + specular;
-	
+	*/
 }
 
 vec3 getSpotLight()

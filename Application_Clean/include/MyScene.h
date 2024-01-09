@@ -11,6 +11,7 @@
 #include "FBOquad.h"
 #include "FrameBuffer.h"
 #include <vector>
+#include "Random.h"
 
 class MyScene : public Scene
 {
@@ -20,6 +21,7 @@ public:
 	void update(float dt);
 	void setHandler(bool handler);
 	void addPointLights(int numLights);
+	void addCubes(unsigned int diffTexture, unsigned int specTexture, unsigned int normalTexture, float shine);
 
 private:
 
@@ -27,8 +29,13 @@ private:
 
 	std::shared_ptr<Cube> m_cube;
 	std::shared_ptr<Cube> m_cube2;
+
+	std::vector<Cube> m_cubes;
 	
 	std::shared_ptr<Plane> m_plane;
+	std::shared_ptr<Plane> m_plane2;
+	std::shared_ptr<Plane> m_plane3;
+
 	std::shared_ptr<Shader> m_myShader;
 	std::shared_ptr<Shader> m_ppShader;
 	std::shared_ptr<FBOquad> m_postProcessing;
@@ -38,6 +45,9 @@ private:
 	std::shared_ptr<SpotLight> m_spotLight;
 	glm::mat4 m_view, m_projection;
 
+	Random ranGen;
+
+	int numCubes = 10;
 	unsigned int m_ID;
 	unsigned int textureColour;
 
